@@ -34,7 +34,7 @@ router.post("/sign-up", async (req, res, next) => {
           },
         });
         // UserInfos 테이블에 사용자 추가
-        const userInfos = await tx.userInfos.create({
+        const userInfo = await tx.userInfos.create({
           data: {
             UserId: user.userId, // 생성한 유저의 userId를 바탕으로 사용자 정보 생성
             name,
