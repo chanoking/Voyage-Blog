@@ -1,35 +1,43 @@
-import { prisma } from "../utils/prisma/index.js";
-
 export class PostsRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
+
   createPost = async (email, password, title, content) => {
-    const createdPost = await prisma.posts.create({
+    const createdPost = await this.prisma.posts.create({
       data: {
         email,
         password,
         title,
         content,
       },
+      
     });
-
+    console.log(createdPost);
     return createdPost;
   };
 
   findAllPosts = async () => {
-    const posts = await prisma.posts.findMany();
+    const posts = await this.prisma.posts.findMany();
 
     return posts;
   };
 
   findPostById = async (postId) => {
-    const post = await prisma.posts.findUnique({
-      where: { postId: +postId },
-    });
+    try {
+      console.log("hello postid", postId);
+      const post = await this.prisma.posts.findUnique({
+        where: { postId: +postId },
+      });
 
-    return post;
+      return post;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   updatePost = async (password, content, title, postId) => {
-    const updatedPost = await prisma.posts.update({
+    const updatedPost = await this.prisma.posts.update({
       where: {
         postId: +postId,
         password: password,
@@ -44,7 +52,7 @@ export class PostsRepository {
   };
 
   deletePost = async (postId, password) => {
-    const deletedPost = await prisma.posts.delete({
+    const deletedPost = await this.prisma.posts.delete({
       where: { postId: +postId, password: password },
     });
     return deletedPost;

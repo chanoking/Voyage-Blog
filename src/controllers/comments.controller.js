@@ -1,8 +1,7 @@
-import { CommentsService } from "../services/comments.service.js";
-
 export class CommentsController {
-  commentsService = new CommentsService();
-
+  constructor(commentsService) {
+    this.commentsService = commentsService;
+  }
   createComment = async (req, res, next) => {
     try {
       const { email, password, content } = req.body;

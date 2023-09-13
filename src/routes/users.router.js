@@ -20,8 +20,16 @@ router.post("/sign-up", async (req, res, next) => {
       return res.status(409).json({ message: "동일한 이메일입니다." });
     }
 
+    const saltRounds = 10;
+
+    let hashedPassword = "";
+
+    const salt = await bcrypt.genSalt(saltRounds);
+
+    hashedPassword = await bcrypt.hash(password, salt);
+
     // 사용자 비밀번호를 암호화
-    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("hashed : ", hashedPassword);
 
     // MySQL과 연결된 Prisma 클라이언트를 통해 트랜잭션을 실행
     const [user, userInfo] = await prisma.$transaction(
@@ -34,6 +42,7 @@ router.post("/sign-up", async (req, res, next) => {
           },
         });
         // UserInfos 테이블에 사용자 추가
+
         const userInfo = await tx.userInfos.create({
           data: {
             UserId: user.userId, // 생성한 유저의 userId를 바탕으로 사용자 정보 생성
@@ -45,6 +54,7 @@ router.post("/sign-up", async (req, res, next) => {
         });
 
         // 콜백 함수의 리턴값으로 사용자와 사용자 정보를 반환
+        console.log([user, userInfo]);
         return [user, userInfo];
       },
       {
@@ -54,6 +64,7 @@ router.post("/sign-up", async (req, res, next) => {
 
     return res.status(201).json({ message: "회원가입을 축하드립니다." });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });
@@ -63,6 +74,8 @@ router.post("/sign-in", async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await prisma.users.findFirst({ where: { email } });
+
+    console.log("test", user)
 
     if (!user) {
       return res.status(401).json({ message: "존재하지 않는 이메일입니다." });
@@ -77,6 +90,7 @@ router.post("/sign-in", async (req, res, next) => {
 
     return res.status(200).json({ message: "로그인 성공" });
   } catch (err) {
+    console.log(err)
     next(err);
   }
 });

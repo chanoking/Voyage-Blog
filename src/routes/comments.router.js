@@ -1,10 +1,15 @@
 import express from "express";
+import { prisma } from "../utils/prisma/index.js";
 import { CommentsController } from "../controllers/comments.controller.js";
+import { CommentsService } from "../services/comments.service.js";
+import { CommentsRepository } from "../repositories/comments.repository.js";
 
 const router = express.Router();
 
-// CommentController의 인스턴스 생성
-const commentsController = new CommentsController();
+//  인스턴스 생성
+const commentsRepository = new CommentsRepository(prisma);
+const commentsService = new CommentsService(commentsRepository);
+const commentsController = new CommentsController(commentsService);
 
 /** 댓글 작성 API */
 router.post("/:postId/comment", commentsController.createComment);

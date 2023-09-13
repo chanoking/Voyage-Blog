@@ -1,7 +1,7 @@
-import { PostsRepository } from "../repositories/posts.repository.js";
-
 export class PostsService {
-  postsRepository = new PostsRepository();
+  constructor(postsRepository) {
+    this.postsRepository = postsRepository;
+  }
 
   createPost = async (email, password, title, content) => {
     // 저장소에게 데이터를 요청
@@ -44,7 +44,10 @@ export class PostsService {
   };
 
   findPostById = async (postId) => {
+    console.log("service", postId)
+
     const post = await this.postsRepository.findPostById(postId);
+
     return {
       postId: post.postId,
       email: post.email,

@@ -1,7 +1,7 @@
-import { CommentsRepository } from "../repositories/comments.repository.js";
-
 export class CommentsService {
-  commentsRepository = new CommentsRepository();
+  constructor(commentsRepository) {
+    this.commentsRepository = commentsRepository;
+  }
 
   createComment = async (email, password, content) => {
     // 저장소에게 데이터를 요청

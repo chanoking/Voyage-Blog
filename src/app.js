@@ -13,12 +13,12 @@ import errorHandlingMiddleware from "./middlewares/error-handling.middleware.js"
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 const router = express.Router();
 
 // MySQLStore를 Express-Session을 이용해 생성
 const MySQLStore = expressMySQLSession(expressSession);
-// MySQLStore를 이용해 세션 외부 스토리지 선언
+// // MySQLStore를 이용해 세션 외부 스토리지 선언
 const sessionStore = new MySQLStore({
   user: process.env.DATABASE_USERNAME,
   password: process.env.DATABASE_PASSWORD,

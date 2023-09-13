@@ -12,7 +12,7 @@ export default async (req, res, next) => {
 
     // req.user에 사용자 정보를 저장
     req.user = user;
-
+    
     next();
   } catch (error) {
     return res

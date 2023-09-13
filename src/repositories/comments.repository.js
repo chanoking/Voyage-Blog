@@ -1,6 +1,7 @@
-import { prisma } from "../utils/prisma/index.js";
-
 export class CommentsRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
   createComment = async (email, password, content) => {
     const createdComment = await prisma.comments.create({
       data: {

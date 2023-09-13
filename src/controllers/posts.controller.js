@@ -1,19 +1,24 @@
-import { PostsService } from "../services/posts.service.js";
-
 export class PostsController {
-  postsService = new PostsService();
+  constructor(postsService) {
+    this.postsService = postsService;
+  }
 
   createPost = async (req, res, next) => {
     try {
       const { email, password, title, content } = req.body;
+      console.log(email, password, title, content)
 
-      const createPost = await this.PostsService.createPost(
+      if (!email || !password || !title || !content) {
+        throw new Error("InvalidParamsError");
+      }
+
+      const createPost = await this.postsService.createPost(
         email,
         password,
         title,
         content
       );
-
+      console.log(createPost);
       return res.status(201).json({ data: createPost });
     } catch (err) {
       next(err);
